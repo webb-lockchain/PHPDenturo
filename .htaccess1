@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule !^.well-known($|/) https://www.denturo.de/$1 [R=301,L]
+
+ErrorDocument 404 https://www.denturo.de/404.php
+
+AddCharset UTF-8 .html
+AddDefaultCharset Off
+
+# Begin Muse Generated redirects
+# End Muse Generated redirects

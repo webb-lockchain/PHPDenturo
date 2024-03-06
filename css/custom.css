@@ -1,0 +1,49 @@
+.disabled-button {
+    position: relative;
+    display: block;
+    background-color: #f6f6f6;
+    margin-top: 20px;
+    padding: 9px 15px;
+}
+
+.tooltip {
+    position: relative;
+    display: block;
+    background-color: #f6f6f6;
+    margin-top: 20px;
+    padding: 9px 15px;
+}
+.test{
+    border:2px solid red;
+}
+/* Tooltip text */
+.disabled-button .tooltiptext {
+    visibility: hidden;
+    width: 250px;
+    background-color: rgb(10, 10, 10);
+    color: #f3efef;
+    text-align: center;
+    padding: 5px 0;
+    border: 1px solid black;
+    border-radius: 6px;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+.disabled-button .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black  transparent;
+  }
+/* Show the tooltip text when you mouse over the tooltip container */
+.disabled-button:hover .tooltiptext {
+    visibility: visible;
+}
