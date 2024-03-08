@@ -44,12 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // $conn->close();
-    // // header("Location: fur-patienten.php?data=$data");
-    // header("Location: /fur-zahnarzte.php");
-    
-
-
 } else {
     // If the form is not submitted, redirect to an error page or display an error message
     echo "Form submission error";

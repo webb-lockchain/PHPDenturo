@@ -63,27 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . mysqli_connect_error());
     } else {
         $tableName = "userdata";
-        // echo "Connected successfully";
-        $result = $conn->query("SHOW TABLES LIKE '$tableName'");
-
-        if ($result->num_rows > 0) {
-        } else {
-            $sql = "CREATE TABLE userdata (
-                    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    origin VARCHAR(50) NOT NULL,
-                    filena VARCHAR(90) NOT NULL,
-                    email VARCHAR(50),
-                    fullName VARCHAR(50),
-                    uaddress VARCHAR(50),
-                    umessage VARCHAR(50),
-                    phoneNumber VARCHAR(50),
-                    position VARCHAR(50),
-                    reg_date DATETIME,
-                    qId VARCHAR(50),
-                    roles VARCHAR(50),
-                    )";
-            $conn->query($sql);
-        }
+        // echo "Connected successfully"; 
         $reg_date = date("Y-m-d H:i:s");
 
         $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
