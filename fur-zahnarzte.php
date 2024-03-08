@@ -941,8 +941,7 @@ textarea {
                     class="w3-button">&times;</span>
             </div>
 
-            <form action="/quoteforpat.php" class="form-container" method="POST" enctype="multipart/form-data"
-                id="quoteForm" class="w-full">
+            <div class="form-container" method="POST" enctype="multipart/form-data" id="quoteForm" class="w-full">
                 <div class="w-full">
                     <a href="index.php" aria-current="page">
                         <img src="images/DenturoLogo.png" alt="Logo" loading="lazy" class=" mt-8 logo-img  w-20 h-20">
@@ -969,6 +968,7 @@ textarea {
                         class="hover:cursor-pointer h-fit flex flex-wrap gap-2 justify-center items-center">
                         <ul id="file_list" class="flex flex-row flex-wrap gap-2"></ul>
                     </div>
+                    <div class="flex justify-end">Your quote ID: <b id="qid"></b></div>
                 </div>
                 <div class="mt-12 w-full sm:w-2/3 mx-auto">
                     <div class="flex flex-row justify-between">
@@ -978,7 +978,7 @@ textarea {
                         <button type="button" class="btn w-2/5 cancel aa" onclick="closeForm()">Close</button>
                     </div>
                 </div>
-            </form>
+            </div>
 
         </div>
     </div>
@@ -1060,6 +1060,7 @@ function file_explorer() {
 }
 
 function uploadSelectedFiles() {
+    // console.log(document.getElementById('qid').innerHTML)
     const form = document.getElementById('quoteForm');
     // const fileInput = document.getElementById('selectfile');
     // const files = fileInput.files;
@@ -1078,6 +1079,7 @@ function uploadSelectedFiles() {
         formData.append('message', document.querySelector('textarea[name="message"]').value);
         formData.append('position', localStorage.getItem("position"));
         formData.append('roles', "dentist");
+        formData.append('detailid', document.getElementById('qid').innerHTML);
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
             if (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "application/msword" || file
@@ -1102,7 +1104,6 @@ function uploadSelectedFiles() {
                 document.getElementById("sending").innerHTML = "Send";
                 document.getElementById('messageTextarea').value = "";
                 closechatForm();
-
             })
             .catch(error => {
                 // Handle any errors

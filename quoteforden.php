@@ -18,7 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve the form data
     $email = $_POST["email"];
     $message = $_POST["message"];
-    $position = $_POST["position"];
+    $detailid = $_POST["detailid"];
+    $position = $_POST["position"];detailid
     $roles = $_POST["roles"];
     $timestamp = time(); // Get the current timestamp
     $qId = date("His", $timestamp); 
@@ -60,37 +61,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $reg_date = date("Y-m-d H:i:s");
         for($j=0;$j<count($targetFile);$j++) {
             $sql = "INSERT INTO filelist (detailid, orgName, changedName)
-                    VALUES ('$filenames[$j]', '$fn[$j]', '$email')";
+                    VALUES (' '$detailid',$filenames[$j]', '$fn[$j]')";
+            echo $sql;
+            $result = $conn->query($sql);
         }
 
-        $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
+        // $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
         
-        if ($validation->num_rows> 0) {
-            $_SESSION['message'] ="Login successfully!";  
-            $users=$validation->fetch_assoc();
-            $_SESSION['user']=$users['firstName'].' '.$users['lastName'];
-            $_SESSION['email']=$email;
-        } 
-        else{
-            $_SESSION['message'] ="Login Failed!";
-        }
-        $sql="SELECT * FROM 'users' WHERE email='$email'";
+        // if ($validation->num_rows> 0) {
+        //     $_SESSION['message'] ="Login successfully!";  
+        //     $users=$validation->fetch_assoc();
+        //     $_SESSION['user']=$users['firstName'].' '.$users['lastName'];
+        //     $_SESSION['email']=$email;
+        // } 
+        // else{
+        //     $_SESSION['message'] ="Login Failed!";
+        // }
+        // $sql="SELECT * FROM 'users' WHERE email='$email'";
 
-        $result = $conn->query("SELECT * FROM users WHERE email= '$email'");
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc() ;
-            $fullName=$row['firstName'].' '.$row['lastName'];
-            $address = $row['uaddress']; 
-            $phoneNumber=$row['phoneNumber']; 
-            for($j=0;$j<count($targetFile);$j++) {
-                $sql = "INSERT INTO userdata (origin, filena, email,fullname, uaddress, umessage, phonenumber,reg_date,position,qId,roles)
-                            VALUES ('$filenames[$j]', '$fn[$j]', '$email','$fullName','$address','$message','$phoneNumber','$reg_date','$position','$qId','$roles')";
-                echo "AAA".$sql;
-                $result = $conn->query($sql);
-            }
-        } else {
+        // $result = $conn->query("SELECT * FROM users WHERE email= '$email'");
+        // if ($result->num_rows > 0) {
+        //     $row = $result->fetch_assoc() ;
+        //     $fullName=$row['firstName'].' '.$row['lastName'];
+        //     $address = $row['uaddress']; 
+        //     $phoneNumber=$row['phoneNumber']; 
+        //     for($j=0;$j<count($targetFile);$j++) {
+        //         $sql = "INSERT INTO userdata (origin, filena, email,fullname, uaddress, umessage, phonenumber,reg_date,position,qId,roles)
+        //                     VALUES ('$filenames[$j]', '$fn[$j]', '$email','$fullName','$address','$message','$phoneNumber','$reg_date','$position','$qId','$roles')";
+        //         echo "AAA".$sql;
+        //         $result = $conn->query($sql);
+        //     }
+        // } else {
 
-        }
+        // }
 
        
     }
