@@ -825,60 +825,18 @@ textarea {
             <div class=" w3-display-topright">
                 <span><a href="https://run.briskinvoicing.com/help/quotes_help.html" class="underline">Help</a></span>
 
-                <span onclick="document.getElementById('chat-popup').style.display='none'"
+                <span onclick="document.getElementById('offer-popup').style.display='none'"
                     class="w3-button">&times;</span>
             </div>
             <div id="bb">
                 <div>
                     <div class="forma">
                         <ul class="tab-group">
-                            <li class="tab active"><a href="#signup">Sign Up</a></li>
-                            <li class="tab"><a href="#login">Log In</a></li>
+                            <li class="tab active"><a href="#login">Log In</a></li>
+                            <li class="tab "><a href="#signup">Sign Up</a></li>
                         </ul>
 
                         <div class="tab-content">
-                            <div id="signup">
-                                <h1 class="snup">Sign Up for Free</h1>
-                                <form class="auth-form" action="signup.php" method="post">
-                                    <div class="top-row">
-                                        <div class="field-wrap">
-                                            <!-- <label>
-                        First Name<span class="req">*</span>
-                      </label> -->
-                                            <input type="text" id="first" name="first" placeholder="First Name" required
-                                                autocomplete="off" />
-                                        </div>
-                                        <div class="field-wrap">
-                                            <!-- <label>
-                        Last Name<span class="req">*</span>
-                      </label> -->
-                                            <input type="text" id="last" name="last" placeholder="Last Name" required
-                                                autocomplete="off" />
-                                        </div>
-                                    </div>
-                                    <div class="field-wrap">
-                                        <input type="email" id="email" name="email" placeholder="Email Address" required
-                                            autocomplete="off" />
-                                    </div>
-
-
-                                    <div class="field-wrap">
-                                        <input type="text" id="uaddress" name="uaddress" placeholder="Address" required
-                                            autocomplete="off" />
-                                    </div>
-                                    <div class="field-wrap">
-                                        <input type="text" id="phoneNumber" name="phoneNumber"
-                                            placeholder=" Phone Number" required autocomplete="off" />
-                                    </div>
-
-
-                                    <div class="field-wrap">
-                                        <input type="password" id="pwd" name="pwd" placeholder="Set A Password" required
-                                            autocomplete="off" />
-                                    </div>
-                                    <button type="submit" class="button button-block">Get Started</button>
-                                </form>
-                            </div>
                             <div id="login">
                                 <h1 class="snup">Welcome Back!</h1>
                                 <form action="login.php" method="post">
@@ -925,6 +883,44 @@ textarea {
                                 </script>
 
                             </div>
+                            <div id="signup">
+                                <h1 class="snup">Sign Up for Free</h1>
+                                <form class="auth-form" action="signup.php" method="post">
+                                    <div class="top-row">
+                                        <div class="field-wrap">
+
+                                            <input type="text" id="first" name="first" placeholder="First Name" required
+                                                autocomplete="off" />
+                                        </div>
+                                        <div class="field-wrap">
+                                            <input type="text" id="last" name="last" placeholder="Last Name" required
+                                                autocomplete="off" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrap">
+                                        <input type="email" id="email" name="email" placeholder="Email Address" required
+                                            autocomplete="off" />
+                                    </div>
+
+
+                                    <div class="field-wrap">
+                                        <input type="text" id="uaddress" name="uaddress" placeholder="Address" required
+                                            autocomplete="off" />
+                                    </div>
+                                    <div class="field-wrap">
+                                        <input type="text" id="phoneNumber" name="phoneNumber"
+                                            placeholder=" Phone Number" required autocomplete="off" />
+                                    </div>
+
+
+                                    <div class="field-wrap">
+                                        <input type="password" id="pwd" name="pwd" placeholder="Set A Password" required
+                                            autocomplete="off" />
+                                    </div>
+                                    <button type="submit" class="button button-block">Get Started</button>
+                                </form>
+                            </div>
+
 
                         </div>
                     </div>
