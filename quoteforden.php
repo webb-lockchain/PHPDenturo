@@ -72,7 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         $result = $conn->query($sql);
-
+        $sql = "INSERT INTO quote (id, email, msg, qstatus,qposition)
+                VALUES ('$detailid', '$email', '$message',1,'$position')";
+        $result = $conn->query($sql);
+                
         // $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
         
         // if ($validation->num_rows> 0) {
