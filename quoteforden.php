@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     } else {
-        $tableName = "userdata";
+        $tableName = "quote";
         // echo "Connected successfully"; 
         $reg_date = date("Y-m-d H:i:s");
 
