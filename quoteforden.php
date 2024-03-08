@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $reg_date = date("Y-m-d H:i:s");
         for($j=0;$j<count($targetFile);$j++) {
             $sql = "INSERT INTO filelist (detailid, orgName, changedName)
-                    VALUES (' '$detailid',$filenames[$j]', '$fn[$j]')";
+                    VALUES ('$detailid','$filenames[$j]', '$fn[$j]')";
             echo $sql;
             $result = $conn->query($sql);
         }

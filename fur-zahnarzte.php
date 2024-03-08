@@ -941,7 +941,7 @@ textarea {
                     class="w3-button">&times;</span>
             </div>
 
-            <div class="form-container" method="POST" enctype="multipart/form-data" id="quoteForm" class="w-full">
+            <form class="form-container" method="POST" enctype="multipart/form-data" id="quoteForm" class="w-full">
                 <div class="w-full">
                     <a href="index.php" aria-current="page">
                         <img src="images/DenturoLogo.png" alt="Logo" loading="lazy" class=" mt-8 logo-img  w-20 h-20">
@@ -978,7 +978,7 @@ textarea {
                         <button type="button" class="btn w-2/5 cancel aa" onclick="closeForm()">Close</button>
                     </div>
                 </div>
-            </div>
+            </form>
 
         </div>
     </div>
