@@ -58,12 +58,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tableName = "quote";
         // echo "Connected successfully"; 
         $reg_date = date("Y-m-d H:i:s");
-        for($j=0;$j<count($targetFile);$j++) {
-            $sql = "INSERT INTO filelist (detailid, orgName, changedName)
-                    VALUES ('$detailid','$filenames[$j]', '$fn[$j]')";
-            echo $sql;
-            $result = $conn->query($sql);
+        $sql = "INSERT INTO filelist (id,detailid, orgName, changedName)\n"."VALUES";
+        for($j=0;$j<count($targetFile);$j++) {    
+            $id=uniqid();        
+            $sql=$sql." ('$id','$detailid','$filenames[$j]', '$fn[$j]'),";
         }
+        
+        // Check if the last character is a comma
+        if (substr($sql, -1) === ',') {
+            // Replace the last comma with a semicolon
+            $sql = substr($sql, 0, -1) . ';';
+        }
+
+
+        $result = $conn->query($sql);
 
         // $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
         
