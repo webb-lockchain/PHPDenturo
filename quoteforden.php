@@ -18,11 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve the form data
     $email = $_POST["email"];
     $message = $_POST["message"];
-    $detailid = $_POST["detailid"];
-    $position = $_POST["position"];detailid
+    $position = $_POST["position"];
     $roles = $_POST["roles"];
+    $detailid = $_POST["detailid"];
     $timestamp = time(); // Get the current timestamp
-    $qId = date("His", $timestamp); 
     $targetDirectory = "denturo.at/uploads/"; // Specify the directory where uploaded files will be stored
     $i = 0;
     $fn = array();

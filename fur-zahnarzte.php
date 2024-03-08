@@ -1060,7 +1060,6 @@ function file_explorer() {
 }
 
 function uploadSelectedFiles() {
-    // console.log(document.getElementById('qid').innerHTML)
     const form = document.getElementById('quoteForm');
     // const fileInput = document.getElementById('selectfile');
     // const files = fileInput.files;
