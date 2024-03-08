@@ -32,9 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $i++;
         }
     }
-
-    $fileName = $_FILES["files"]["name"];
-  
+    $fileName = $_FILES["files"]["name"];  
     $fileNames = $_FILES["files"]["name"];
     $filenames = array();
     $fileextensions = array();
@@ -46,12 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fileextensions[] = $extension;
         $newFileName = md5(time()) . "." . $extension;
         $targetFile[] = $targetDirectory . $newFileName; // Get the file name
-
     }
-
-
-    
-
     (new DotEnv(__DIR__ . '/.env'))->load();
     $server = getenv('server');
     $user = getenv('login');
@@ -65,6 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tableName = "quote";
         // echo "Connected successfully"; 
         $reg_date = date("Y-m-d H:i:s");
+        for($j=0;$j<count($targetFile);$j++) {
+            $sql = "INSERT INTO filelist (detailid, orgName, changedName)
+                    VALUES ('$filenames[$j]', '$fn[$j]', '$email')";
+        }
 
         $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
         
@@ -77,10 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else{
             $_SESSION['message'] ="Login Failed!";
         }
-
-
-
-
         $sql="SELECT * FROM 'users' WHERE email='$email'";
 
         $result = $conn->query("SELECT * FROM users WHERE email= '$email'");
