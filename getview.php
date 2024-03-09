@@ -6,7 +6,7 @@ use DevCoder\DotEnv;
 (new DotEnv(__DIR__ . '/.env'))->load();
 
 // Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Retrieve the form data
     $position = $_POST['position'];
     $role = $_POST['role'];
@@ -15,52 +15,94 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = getenv('login');
     $password = getenv('password');
     $database = getenv('database');
-    $tableName = "users";
 
     $conn = new mysqli($server, $user, $password, $database);
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     } else {
-        $tableName = "";
-        if($position=="rnq"||$position=="cq"){
-            $tableName ="quote";
-        }
-        else if($position=="so"){
-            $tableName ="offers";
-        }
-        else if($position=="rno"){
-            $tableName ="orders";
-        }
+        if (isset($_GET['where'])) {
+            $where = $_GET['where'];
+            if(strpos($where, 'id_') !== false) {
+                $parts = explode("_", $where);
+                if (count($parts) == 2 && $parts[0] == "id") {
+                    $id = $parts[1];
+                    $validation = $conn->query("UPDATE quote SET qstatus=2 WHERE id = $id");
 
+                    $validation = $conn->query("SELECT orgName AS orgname,changedName AS changedname ,CONCAT('https://denturo.at/uploads/', changedName) AS url FROM `filelist` WHERE detailid = $id");
+                    $filelistData = array();
+                    while ($row = $validation->fetch_assoc()) {
+                        $filelistData[] = $row;
+                    }
+                    $validation = $conn->query("SELECT quote.id, quote.msg AS usermsg,
+                    CONCAT(users.firstName, ' ', users.lastName) AS fname,
+                    quote.email, users.phoneNumber AS phone,
+                    users.uaddress AS address 
+                    FROM quote 
+                    JOIN users ON users.email = quote.email
+                    WHERE quote.id = $id;");
+                    $quoteData = $validation->fetch_assoc();
+                    $combinedData = array(
+                        'userfile' => $filelistData,
+                        'quote' => $quoteData
+                    );
+                    $jsonData = json_encode($combinedData);
+                    echo json_encode($jsonData);
+                }
+            }
+            else{
+                if($where=="rnq"){
+                    $validation=$conn->query("SELECT 
+                    CONCAT(users.firstName, ' ', users.lastName) AS writer, 
+                    quote.created, 
+                    quote.msg, 
+                    quote.id, 
+                    TIMEDIFF(NOW(), quote.created) AS passed
+                    FROM users 
+                    JOIN quote ON users.email = quote.email
+                    WHERE quote.qstatus = 1 ;");     
+                }
+                else if($where=="cq") {
+                    $validation=$conn->query("SELECT 
+                    CONCAT(users.firstName, ' ', users.lastName) AS writer, 
+                    quote.created, 
+                    quote.msg, 
+                    quote.id, 
+                    TIMEDIFF(NOW(), quote.created) AS passed
+                    FROM users 
+                    JOIN quote ON users.email = quote.email
+                    WHERE quote.qstatus=2;");   
+                } 
+                else if($where=="so"){
+                    $validation=$conn->query("SELECT 
+                    CONCAT(users.firstName, ' ', users.lastName) AS writer, 
+                    quote.created, 
+                    quote.msg, 
+                    quote.id, 
+                    TIMEDIFF(NOW(), quote.created) AS passed
+                    FROM users 
+                    JOIN quote ON users.email = quote.email
+                    WHERE quote.qstatus = 1 ;");     
+                }   
+                if ($validation) {
+                    $resultArray = array();
+                    while ($row = $validation->fetch_assoc()) {
+                        $resultArray[] = $row;
+                    }
+                    echo json_encode($resultArray);
+                }          
+            }
 
-
-        // echo "Connected successfully";
-        $validation=$conn->query("SELECT * FROM '$tableName' WHERE email= '$email' AND pwd='$password'");        
+            
         
-        if ($validation->num_rows> 0) {
-            $_SESSION['message'] ="Login successfully!";  
-            $users=$validation->fetch_assoc();
-            $_SESSION['user']=$users['firstName'].' '.$users['lastName'];
-            $_SESSION['email']=$email;
-            $conn->close();
-            // header("Location: fur-patienten.php?data=$data");
-            echo 'success';
-            // header("Location: /fur-zahnarzte.php");
-            exit;
-
-        } 
-        else{
-            $_SESSION['message'] ="Login Failed!";
-            $conn->close();
-            echo 'error';
+        } else {
+            // 'where' parameter is not set
+            echo "Missing 'where' parameter";
         }
+
+
+       
+        $conn->close();
     }
-
-    // $conn->close();
-    // // header("Location: fur-patienten.php?data=$data");
-    // header("Location: /fur-zahnarzte.php");
-    
-
 
 } else {
     // If the form is not submitted, redirect to an error page or display an error message

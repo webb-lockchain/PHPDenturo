@@ -40,6 +40,17 @@ body {
     padding: 0.01em 30px !important
 }
 
+.verifycode {
+    width: 40px !important;
+    border-radius: 0.75rem;
+    border-width: 2px;
+    padding: 2px !important;
+    border-color: #D2D6DC;
+    min-height: 40px !important;
+    text-align: center;
+    font-size: 22px;
+}
+
 .aa {
     z-index: 0 !important;
     transition: transform 0.2s ease;
@@ -216,7 +227,7 @@ body {
     background-color: #EEE;
     border: #999 5px dashed;
     width: 100%;
-    height: 200px;
+    height: 150px;
     padding: 8px;
     margin-bottom: 30px;
     font-size: 18px;
@@ -515,7 +526,51 @@ body {
                                 <ul id="file_list" class="flex flex-row flex-wrap gap-2"></ul>
                             </div>
                             <label for="quoteId">Your quote ID: <b id="qid"></b></label>
+                            <div class="flex flex-col">
+                                <div class="w-full flex justify-between">
+                                    <input type="text" class="verifycode" maxlength="1"
+                                        oninput="moveToNextInput(this)" />
+                                    <input type="text" class="verifycode" maxlength="1"
+                                        oninput="moveToNextInput(this)" />
+                                    <input type="text" class="verifycode" maxlength="1"
+                                        oninput="moveToNextInput(this)" />
+                                    <input type="text" class="verifycode" maxlength="1"
+                                        oninput="moveToNextInput(this)" />
+                                    <input type="text" class="verifycode" maxlength="1"
+                                        oninput="moveToNextInput(this)" />
+                                </div>
+                                <div id="emailText"
+                                    class="w-full flex justify-end mb-6 -mt-2 underline hover:text-blue-200 text-blue-400 hover:cursor-pointer">
+                                    Get Code by email
+                                </div>
+                            </div>
+
+                            <script>
+                            function moveToNextInput(currentInput) {
+                                if (currentInput.value.length === 1) {
+                                    const allInputs = document.querySelectorAll('.verifycode');
+                                    let allFilled = true;
+
+                                    allInputs.forEach(input => {
+                                        if (input.value.length !== 1) {
+                                            allFilled = false;
+                                        }
+                                    });
+
+                                    if (allFilled) {
+                                        document.getElementById('emailText').innerText = 'Checked';
+                                    } else {
+                                        const nextInput = currentInput.nextElementSibling;
+                                        if (nextInput !== null) {
+                                            nextInput.focus();
+                                        }
+                                    }
+                                }
+                            }
+                            </script>
+
                         </div>
+
                     </div>
                     <div class="w-full sm:w-2/3 mx-auto">
                         <div class="flex flex-row justify-between">

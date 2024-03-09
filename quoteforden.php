@@ -1,3 +1,4 @@
+<!-- uploading action for dentist -->
 <?php
 include("conf.php");
 use DevCoder\DotEnv;
@@ -72,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         $result = $conn->query($sql);
-        $sql = "INSERT INTO quote (id, email, msg, qstatus,qposition)
-                VALUES ('$detailid', '$email', '$message',1,'$position')";
+        $sql = "INSERT INTO quote (id, email, msg, qstatus,qposition,created)
+                VALUES ('$detailid', '$email', '$message',1,'$position','$reg_date')";
         $result = $conn->query($sql);
                 
         // $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
