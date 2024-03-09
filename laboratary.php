@@ -8,7 +8,7 @@
         font-family: Arial;
     }
 
-    * Add styles to the form container */ .form-container {
+    .form-container {
         width: 100%;
         padding: 10px;
         background-color: white;
