@@ -521,7 +521,7 @@
                     </div>
 
                     <div class="mt-12"></div>
-                    <label for="fullName"><b>Write down to user</b></label>
+                    <label for="fullName"><b id="offerviewer">Write down to user</b></label>
                     <div class="w-full p-8 rounded-xl border-2 border-gray-300">
                         <label for="message"><b>Message</b></label>
                         <textarea placeholder="Enter your message" name="message" id="messageTextarea"
@@ -531,6 +531,8 @@
                         <div id="drop_file_zone" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)"
                             class="hover:cursor-pointer h-fit flex flex-wrap gap-2 justify-center items-center">
                             <ul id="file_list" class="flex flex-row flex-wrap gap-2"></ul>
+                        </div>
+                        <div id="offerfilelist" class="w-full p-6 border-[1px] border-gray-500 flex justify-center">
                         </div>
                     </div>
 
@@ -575,7 +577,6 @@
             const formData = new FormData(form);
             formData.append('message', document.querySelector('textarea[name="message"]').value);
             formData.append('position', localStorage.getItem("position"));
-            formData.append('roles', "dentist");
             formData.append('detailid', docId);
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
@@ -600,25 +601,12 @@
                 processData: false, // Prevent jQuery from automatically processing the data
                 contentType: false, // Set content type to false for FormData
                 success: function(data) {
-                    // so = JSON.parse(data);
-                    // refresh('cq');
-                    // refresh('so');
+                    so = JSON.parse(data);
+                    requestcq();
+                    refresh('so');
                     document.getElementById('detail-popup').style.display = 'none'
                 }
             });
-            // fetch('/quoteforden.php', {
-            //         method: 'POST',
-            //         body: formData
-            //     })
-            //     .then(response => {
-            //         // Handle the server response                    
-            //         document.getElementById('messageTextarea').value = "";
-            //         closechatForm();
-            //     })
-            //     .catch(error => {
-            //         // Handle any errors
-            //         console.error('Error uploading files:', error);
-            //     });
         }
     }
 
@@ -788,6 +776,7 @@
 
     var rnq = [];
     var cq = [];
+    var so = [];
 
     function requestrnq() {
         $.ajax({
@@ -812,27 +801,28 @@
             },
             success: function(data) {
                 cq = JSON.parse(data);
-                if (cq.length != 0) refresh('cq');
+                refresh('cq');
             }
         });
     }
 
-    // function requestso() {
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "getview.php",
-    //         data: {
-    //             where: "so"
-    //         },
-    //         success: function(data) {
-    //             cq = JSON.parse(data);
-    //             console.log(cq)
-    //             if (cq.length != 0) refresh('cq');
-    //         }
-    //     });
-    // }
+    function requestso() {
+        $.ajax({
+            type: "GET",
+            url: "getview.php",
+            data: {
+                where: "so"
+            },
+            success: function(data) {
+                so = JSON.parse(data);
+                refresh('cq');
+                if (so.length != 0) refresh('so');
+            }
+        });
+    }
     requestrnq();
     requestcq();
+    requestso();
 
     var rno = [{
             created: "Mar29, 2024",
@@ -877,56 +867,6 @@
             id: 6
         }
     ];
-    var so = [{
-            created: "Mar29, 2024",
-            passed: "2 days ago",
-            msg: "SO, I am checking quotes.",
-            writer: "Hamilton",
-            id: 3
-        },
-        {
-            created: "Mar28, 2024",
-            passed: "3 days ago",
-            msg: "Second checking quotes are ok.",
-            writer: "Evan",
-            id: 4
-        },
-        {
-            created: "Mar20, 2024",
-            passed: "11 days ago",
-            msg: "Who are you?",
-            writer: "Deandre",
-            id: 5
-        },
-        {
-            created: "Mar19, 2024",
-            passed: "12 days ago",
-            msg: "You are the top",
-            writer: "Jones",
-            id: 6
-        },
-        {
-            created: "Mar28, 2024",
-            passed: "3 days ago",
-            msg: "Second checking quotes are ok.",
-            writer: "Evan",
-            id: 4
-        },
-        {
-            created: "Mar20, 2024",
-            passed: "11 days ago",
-            msg: "Who are you?",
-            writer: "Deandre",
-            id: 5
-        },
-        {
-            created: "Mar19, 2024",
-            passed: "12 days ago",
-            msg: "You are the top",
-            writer: "Jones",
-            id: 6
-        }
-    ];
 
     function details(id) {
         document.getElementById("sending").innerHTML = "Send";
@@ -939,6 +879,7 @@
             },
             success: function(data) {
                 var temp = JSON.parse(JSON.parse(data));
+
                 detail = {
                     userfile: temp.userfile,
                     id: temp.quote.id,
@@ -959,16 +900,17 @@
                 }
                 document.getElementById('detail-popup').style.display = 'block';
                 document.getElementById('viewdetail').innerHTML =
-                    '<div class="flex flex-row justify-end mb-8"><div><b>quoteID:</b>&nbsp;' + detail.id +
-                    '</div></div><label for="fullName"><b>From User</b></label><div class="w-full p-8 rounded-xl border-2 border-gray-300 "><div class="flex flex-row justify-between"><label for="fullName"><b>User info</b></label> <div id="showoption"  class="underline text-blue-500 hover:cursor-pointer hover:text-blue-400"  onclick="visible()"></div></div><div id="contactinfo" class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-6 border-[1px] border-gray-500 mb-8"><div class="flex flex-row"><div class="font-bold">Full Name:</div><div>&nbsp;' +
+                    '<div class="flex flex-row justify-end mb-8"><div><b>quoteID:</b>&nbsp;' + detail
+                    .id +
+                    '</div></div><label for="fullName"><b>From User</b></label><div class="w-full p-8 rounded-xl border-2 border-gray-300 "><div class="flex flex-row justify-between"><label for="fullName"><b>User info</b></label> <div id="showoption"  class="underline text-blue-500 hover:cursor-pointer hover:text-blue-400"  onclick="visible()"></div></div><div id="contactinfo" class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-6 border-[1px] border-gray-500 mb-8"><div class="flex flex-row"><div class="font-bold">Full Name:</div><div class="break-all">&nbsp;' +
                     detail.user.fname +
-                    '</div></div><div class="flex flex-row"><div class="font-bold">Email:</div><div>&nbsp;' +
+                    '</div></div><div class="flex flex-row"><div class="font-bold">Email:</div><div class="break-all">&nbsp;' +
                     detail.user
                     .email +
-                    '</div></div> <div class="flex flex-row"><div class="font-bold">Phone:</div><div>&nbsp;' +
+                    '</div></div> <div class="flex flex-row"><div class="font-bold">Phone:</div><div class="break-all">&nbsp;' +
                     detail
                     .user.phone +
-                    '</div></div> <div class="flex flex-row"><div class="font-bold">Address:</div><div>&nbsp;' +
+                    '</div></div> <div class="flex flex-row"><div class="font-bold">Address:</div><div class="break-all">&nbsp;' +
                     detail.user.address +
                     '</div></div><div class="flex flex-row"><div class="font-bold">Actions:</div><div>&nbsp;' +
                     detail.user
@@ -985,6 +927,30 @@
 
                 visibleiniF = 1;
                 document.getElementById('showoptionF').innerHTML = 'Hide';
+                if (id.search("o_") >= 0) {
+                    document.getElementById('offerviewer').innerHTML = 'Sent offer to user';
+                    document.getElementById('messageTextarea').innerHTML = temp.offermsg.msg;
+                    document.getElementById('messageTextarea').disabled = true;
+                    document.getElementById('drop_file_zone').style.display = 'none';
+
+                    var filetag = '';
+                    for (let i = 0; i < temp.offerfilelistData.length; i++) {
+                        filetag = filetag + '<a href=' + '"' + detail.userfile[i]
+                            .url + '"' + 'class="underline text-blue-500 hover:text-blue-400" download>' +
+                            detail.userfile[i]
+                            .orgname + '</a>';
+                    }
+                    filetag = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> ' + filetag + '</div>';
+                    document.getElementById('offerfilelist').innerHTML = filetag;
+                    document.getElementById('offerfilelist').style.display = 'flex';
+                    console.log(temp);
+                } else {
+                    document.getElementById('offerviewer').innerHTML = 'Write down to user';
+                    document.getElementById('offerfilelist').style.display = 'none';
+                    document.getElementById('messageTextarea').innerHTML = ""
+                    document.getElementById('messageTextarea').disabled = false;
+                    document.getElementById('drop_file_zone').style.display = 'block';
+                }
                 requestrnq();
                 requestcq();
             }
@@ -1015,9 +981,8 @@
             target.counts = 'rnocount';
             target.tag = 'vieworders';
         }
-        console.log(target.list);
         if (target.list.length != 0) {
-            var rnqtag = '<div onclick="details(' + target.list[0].id +
+            var rnqtag = '<div onclick="details(' + "'" + target.list[0].id + "'" +
                 ')"class="mt-6 hover:cursor-pointer flex flex-col sm:flex-row w-full justify-between items-center border-b-2 border-gray-200 py-4"><div class="w-full sm:w-2/12 flex flex-col"><div class="text-lg">' +
                 target.list[0].created +
                 '</div><div class="text-sm">' + target.list[0].passed + " ago" +
@@ -1027,7 +992,7 @@
                 '</div></div>';
             for (let i = 1; i < target.list.length - 1; i++) {
                 rnqtag = rnqtag +
-                    '<div onclick="details(' + target.list[i].id +
+                    '<div onclick="details(' + "'" + target.list[i].id + "'" +
                     ')" class="hover:cursor-pointer flex flex-col sm:flex-row w-full justify-between items-center border-b-2 border-gray-200 py-4"> <div class="w-full sm:w-2/12 flex flex-col"> <div class="text-lg">' +
                     target.list[i].created +
                     '</div> <div class="text-sm">' + target.list[i].passed + " ago" +
@@ -1037,7 +1002,7 @@
             }
             if (target.list.length > 1) {
                 rnqtag = rnqtag +
-                    '<div  onclick="details(' + target.list[target.list.length - 1].id +
+                    '<div  onclick="details(' + "'" + target.list[target.list.length - 1].id + "'" +
                     ')" class="hover:cursor-pointer flex flex-col sm:flex-row w-full justify-between items-center py-4"><div class="w-full sm:w-2/12 flex flex-col"><div class="text-lg">' +
                     target.list[target.list.length - 1].created +
                     '</div><div class="text-sm">' + target.list[target.list.length - 1].passed + " ago" +

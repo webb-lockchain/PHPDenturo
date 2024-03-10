@@ -76,37 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO quote (id, email, msg, qstatus,qposition,created)
                 VALUES ('$detailid', '$email', '$message',1,'$position','$reg_date')";
         $result = $conn->query($sql);
-                
-        // $validation=$conn->query("SELECT * FROM users WHERE email= '$email' AND pwd='$password'");        
-        
-        // if ($validation->num_rows> 0) {
-        //     $_SESSION['message'] ="Login successfully!";  
-        //     $users=$validation->fetch_assoc();
-        //     $_SESSION['user']=$users['firstName'].' '.$users['lastName'];
-        //     $_SESSION['email']=$email;
-        // } 
-        // else{
-        //     $_SESSION['message'] ="Login Failed!";
-        // }
-        // $sql="SELECT * FROM 'users' WHERE email='$email'";
-
-        // $result = $conn->query("SELECT * FROM users WHERE email= '$email'");
-        // if ($result->num_rows > 0) {
-        //     $row = $result->fetch_assoc() ;
-        //     $fullName=$row['firstName'].' '.$row['lastName'];
-        //     $address = $row['uaddress']; 
-        //     $phoneNumber=$row['phoneNumber']; 
-        //     for($j=0;$j<count($targetFile);$j++) {
-        //         $sql = "INSERT INTO userdata (origin, filena, email,fullname, uaddress, umessage, phonenumber,reg_date,position,qId,roles)
-        //                     VALUES ('$filenames[$j]', '$fn[$j]', '$email','$fullName','$address','$message','$phoneNumber','$reg_date','$position','$qId','$roles')";
-        //         echo "AAA".$sql;
-        //         $result = $conn->query($sql);
-        //     }
-        // } else {
-
-        // }
-
-       
     }
 
     $conn->close();
