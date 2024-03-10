@@ -529,13 +529,7 @@
                         <label for="message"><b>File list</b></label>
 
                         <div id="drop_file_zone" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)"
-                            class="hover:cursor-pointer h-fit flex justify-center items-center">
-                            <div id="drag_upload_file" class="h-auto relative">
-                                <p onclick="file_explorer();" class="text-gray-300 text-2xl">Drop here or click</p>
-                                <!-- <p><input type="button" value="Browse" onclick="file_explorer();" /></p> -->
-                                <input type="file" id="selectfile" multiple accept=".jpg,.jpeg,.doc,.docx,.png"
-                                    class="flex flex-wrap gap-2 absolute" />
-                            </div>
+                            class="hover:cursor-pointer h-fit flex flex-wrap gap-2 justify-center items-center">
                             <ul id="file_list" class="flex flex-row flex-wrap gap-2"></ul>
                         </div>
                     </div>
@@ -560,6 +554,204 @@
     </div>
 
     <script>
+    var docId;
+
+    function
+    uploadSelectedFiles() {
+        const form = document.getElementById('quoteForm');
+        // const fileInput = document.getElementById('selectfile');
+        // const files = fileInput.files;
+        const files = droppedFiles;
+
+        var messageTextarea = document.getElementById('messageTextarea');
+        if (messageTextarea.value.trim() === '') {
+            alert('Please enter your message');
+            messageTextarea.focus(); // Set focus to the full name input field
+            return false; // Prevent form submission
+        }
+        document.getElementById("sending").innerHTML =
+            '<img src="images/icons/loading.gif" class="mx-auto w-8 h-8 z-20"/>';
+        if (files.length > 0) {
+            const formData = new FormData(form);
+            formData.append('message', document.querySelector('textarea[name="message"]').value);
+            formData.append('position', localStorage.getItem("position"));
+            formData.append('roles', "dentist");
+            formData.append('detailid', docId);
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                if (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "application/msword" ||
+                    file
+                    .type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    if (file.size <= 2 * 1024 * 1024) {
+                        formData.append('files[]', file);
+                    } else {
+                        alert('File size exceeds 10MB limit:    ' + file.name);
+                        return; // Stop further processing if file size exceeds the limit
+                    }
+                } else {
+                    alert('Invalid file type:    ' + file.name);
+                    return; // Stop further processing if file type is invalid
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: "getview.php",
+                data: formData,
+                processData: false, // Prevent jQuery from automatically processing the data
+                contentType: false, // Set content type to false for FormData
+                success: function(data) {
+                    // so = JSON.parse(data);
+                    // refresh('cq');
+                    // refresh('so');
+                    document.getElementById('detail-popup').style.display = 'none'
+                }
+            });
+            // fetch('/quoteforden.php', {
+            //         method: 'POST',
+            //         body: formData
+            //     })
+            //     .then(response => {
+            //         // Handle the server response                    
+            //         document.getElementById('messageTextarea').value = "";
+            //         closechatForm();
+            //     })
+            //     .catch(error => {
+            //         // Handle any errors
+            //         console.error('Error uploading files:', error);
+            //     });
+        }
+    }
+
+
+    let droppedFiles = [];
+
+    function dragoverHandler(ev) {
+        ev.preventDefault();
+        ev.dataTransfer.dropEffect = "move";
+    }
+
+    function dragStartHandler(ev) {
+        ev.preventDefault(0);
+        const sourceImage = ev.target;
+
+        // Check if the dragged item is an image file
+        if (sourceImage.src.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/)) {
+            // Set the data to transfer
+            ev.dataTransfer.setData("text/plain", "image"); // Set a data type to identify it as an image file
+        } else if (sourceImage.src.toLowerCase().match(/\.(doc|docx|pdf)$/)) {
+            // Set the data to transfer
+            ev.dataTransfer.setData("text/plain", "document"); // Set a data type to identify it as a document file
+        } else {
+            // Set a default drag image for other file types
+            ev.dataTransfer.setData("text/plain", "other"); // Set a data type to identify it as another file type
+        }
+    }
+    var i = 0;
+
+    function dropHandler(ev) {
+        ev.preventDefault();
+        if (i < 3) {
+            files = null;
+            // Access the data type set in the dragStartHandler
+            const dataType = ev.dataTransfer.getData("text/plain");
+
+            // Create a new container with flex properties
+            const flexContainer = document.createElement("div");
+            flexContainer.className = "flex justify-center items-center"; // Add flex properties
+
+            // Create a flex column container
+            const flexColumn = document.createElement("div");
+            flexColumn.className = "flex flex-col items-center"; // Add flex column properties
+
+            // Create the image container
+            const smallImage = document.createElement("div");
+            smallImage.className = "image-container"; // Add a class to the image container for styling
+            const imageElement = document.createElement("img");
+            if (dataType === "image") {
+                imageElement.src = "img.png"; // Show img.png for image files
+            } else if (dataType === "document") {
+                imageElement.src = "doc.png"; // Show doc.png for document files
+            } else {
+                // Handle other file types
+                // For example, you can set a default image or handle them differently
+                imageElement.src = "doc.png"; // Show a default image for other file types
+            }
+            imageElement.style.width = "50px"; // Set the width of the small image
+            imageElement.style.height = "50px"; // Set the height of the small image
+            imageElement.style.border = "1px solid black"; // Add a border to the small image
+            imageElement.style.margin = "5px"; // Add some margin to the small image
+
+            // Create a "cancel" button for removing the image
+            const cancelButton = document.createElement("button");
+            cancelButton.innerHTML = '<i class="fas closed fa-times"></i>'; // Use the Font Awesome cancel icon
+            cancelButton.addEventListener("click", function() {
+                flexColumn.remove(); // Remove the flex column when the "cancel" button is clicked
+                i = i - 1;
+                console.log(flexColumn)
+                // Get the file name from the File object
+                const fileName = document.createElement("div");
+                console.log(fullFileName)
+                const file = event.dataTransfer.files[0]; // Assuming only one file is dropped
+                const fullFileName = file.name;
+                console.log(droppedFiles);
+                // Find the index of the file in the droppedFiles array
+                const droppedFiles = droppedFiles.filter(file => file.name !== fileName);
+                console.log(droppedFiles);
+
+            });
+
+            i = i + 1;
+            // Append the image and the "cancel" button to the image container
+            smallImage.appendChild(imageElement);
+            smallImage.appendChild(cancelButton);
+
+            // Append the image container to the flex column
+            flexColumn.appendChild(smallImage);
+
+            // Get the file name from the File object
+            const fileName = document.createElement("div");
+            const file = event.dataTransfer.files[0]; // Assuming only one file is dropped
+            const fullFileName = file.name;
+            const shortFileName = fullFileName.substring(0, 6); // Get the first 4 characters of the file name
+            fileName.textContent = shortFileName; // Set the short file name
+            fileName.title = fullFileName; // Set the full file name as the title for hover
+
+            // Add a class to style the file name
+            fileName.className = "file-name text-center";
+
+            // Add a hover effect using CSS
+            fileName.style.cursor = "pointer"; // Change cursor to pointer on hover
+            fileName.style.textDecoration = "underline"; // Underline the text on hover
+
+            // Show the full file name on hover
+            fileName.addEventListener("mouseover", function() {
+                fileName.textContent = fullFileName; // Show the full file name on hover
+            });
+
+            // Show the short file name on mouseout
+            fileName.addEventListener("mouseout", function() {
+                fileName.textContent = shortFileName; // Show the short file name on mouseout
+            });
+
+            // Append the file name to the flex column
+            flexColumn.appendChild(fileName);
+
+            // Append the flex column to the flex container
+            flexContainer.appendChild(flexColumn);
+
+            // Append the flex container to the drop target
+            ev.target.appendChild(flexContainer);
+
+            // files = event.dataTransfer.files;
+            // droppedFiles = Array.from(files);
+
+            droppedFiles.push(file);
+            // Handle the dropped files
+            console.log(files);
+        } else alert("You can attach less than 3 files. ")
+    }
+
+
     function createview(role) {
         if (role == "Dentists") {
             viewdata("rnq", role);
@@ -737,6 +929,8 @@
     ];
 
     function details(id) {
+        document.getElementById("sending").innerHTML = "Send";
+        docId = id;
         $.ajax({
             type: "GET",
             url: "getview.php",

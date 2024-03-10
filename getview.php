@@ -4,19 +4,17 @@ include("conf.php");
 use DevCoder\DotEnv;
 
 (new DotEnv(__DIR__ . '/.env'))->load();
+$server = getenv('server');
+$user = getenv('login');
+$password = getenv('password');
+$database = getenv('database');
 
+$conn = new mysqli($server, $user, $password, $database);
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Retrieve the form data
     $position = $_POST['position'];
-    $role = $_POST['role'];
-    (new DotEnv(__DIR__ . '/.env'))->load();
-    $server = getenv('server');
-    $user = getenv('login');
-    $password = getenv('password');
-    $database = getenv('database');
-
-    $conn = new mysqli($server, $user, $password, $database);
+    $role = $_POST['role'];    
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     } else {
@@ -91,21 +89,33 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     echo json_encode($resultArray);
                 }          
             }
-
+            if($where=="cq_"){
+                $formData= $_GET['formData'];
+                print_r($formData);
+            }
             
         
-        } else {
+        } 
+        
+        else {
             // 'where' parameter is not set
             echo "Missing 'where' parameter";
         }
-
-
-       
         $conn->close();
     }
 
-} else {
-    // If the form is not submitted, redirect to an error page or display an error message
-    echo "Form submission error";
+} 
+else if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if (isset($_POST['message'])&&isset($_FILES['files']) && !empty($_FILES['files'])) {
+        $detailid=$_POST['detailid']
+        $roles=$_POST['roles']
+        $message=$_POST['message']
+        $detailid=$_POST['message']
+        $detailid=$_POST['message']
+    }
 }
+// else {
+//     // If the form is not submitted, redirect to an error page or display an error message
+//     echo "Form submission error";
+// }
 ?>
