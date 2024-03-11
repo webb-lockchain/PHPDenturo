@@ -341,7 +341,7 @@
                 <div class="mt-4 w-full border-2 border-gray-200 rounded-xl p-6">
                     <div id="receivedquote" onclick="viewinfo(1)"
                         class=" text-3xl hover:cursor-pointer flex justify-between ">
-                        <span>Received new quotes (<span id='rnqcount'></span>)</span>
+                        <span> Request for a quote (<span id='rnqcount'></span>)</span>
                         <div id="exp1">-</div>
                     </div>
 
