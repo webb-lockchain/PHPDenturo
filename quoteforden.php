@@ -158,6 +158,30 @@ else if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 echo json_encode($jsonData);
                 exit ;
             }
+            if(strpos($where, 'ordertoggle_')===0){
+                $ids= explode("_",$where);
+                $id=$ids[1];
+                $validation = $conn->query("SELECT orgName AS orgname,changedName AS changedname ,CONCAT('https://denturo.at/uploads/', changedName) AS url FROM `filelist` WHERE detailid = $id");
+                $filelistData = array();
+                while ($row = $validation->fetch_assoc()) {
+                    $filelistData[] = $row;
+                }
+                $validation = $conn->query("SELECT quote.id, quote.msg AS usermsg,
+                    CONCAT(users.firstName, ' ', users.lastName) AS fname,
+                    quote.email, users.phoneNumber AS phone,
+                    users.uaddress AS address 
+                    FROM quote 
+                    JOIN users ON users.email = quote.email
+                    WHERE quote.id = $id;");
+                $quoteData = $validation->fetch_assoc();
+                $combinedData = array(
+                    'userfile' => $filelistData,
+                    'quote' => $quoteData,
+                );
+                $jsonData = json_encode($combinedData);
+                echo json_encode($jsonData);
+                exit ;
+            }
         }        
         if ($validation) {
             $resultArray = array();
