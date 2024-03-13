@@ -10,6 +10,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* #viewdetail-offer {
+    background-image: url('images/ordered.png');
+} */
+
 /* The Modal (background) */
 .modal {
     display: none;
@@ -71,8 +75,39 @@ body {
     width: 300px;
 }
 
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
 
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
 
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    border-top: none;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
 
 .dropbtn {
     background-color: #4CAF50;
@@ -131,6 +166,10 @@ body {
     background-color: white;
 }
 
+.qq {
+    max-width: 500px !important;
+}
+
 /* Full-width textarea */
 .form-container textarea {
     width: 100%;
@@ -148,6 +187,25 @@ body {
     outline: none;
 }
 
+.detail-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 99;
+    width: 300px;
+}
+
+.detail-offer-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 99;
+    width: 300px;
+}
 
 /* Full-width textarea */
 .form-container input {
@@ -559,12 +617,6 @@ if (!$conn) {
 }
 
 
-
-
-
-
-
-
 ?>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -577,8 +629,6 @@ if (!$conn) {
             localStorage.setItem("user", "<?php echo $_SESSION['user']; ?>");
             </script>
             <div id="loginButton" class="flex items-center p-8">
-                <!-- <div class="termin-button-new heading-font3 highlights w-button aa"
-          onclick="document.getElementById('chat-popup').style.display='block'">Make a Quote</div> -->
                 <div class="termin-button-new heading-font3 highlights w-button aa" onclick="utadata()" id="uta">Request
                     a Quote
                 </div>
@@ -604,9 +654,6 @@ if (!$conn) {
                 </div>
             </div>
             <div id="snackbar">Please check your email and verify your uploaded data.</div>
-            <script>
-            setNoti()
-            </script>
         </div>
         <div id="new">
             <div id="loginButton" class="p-8">
@@ -643,219 +690,400 @@ if (!$conn) {
                 window.location.href = "settings.php";
             }
         }
-
-        function setNoti() {
-            alert("dddd")
-            var x = document.getElementById("snackbar");
-            x.className = "show";
-            setTimeout(function() {
-                x.className = x.className.replace("show", "");
-            }, 5000);
-        }
         </script>
-
-
-
-
-
-
-
-
     </div>
-
 </div>
-
-<div id="viewtable" style="display:none">
-    <div class="-mt-12">
-        <div id="progressstatus" class="mx-auto w-full md:w-1/2">
-            <div class="w-full flex justify-center items-center">
-                <div title="Successfully sent"
-                    class="w-24 h-24 rounded-full border-8 border-green-600  hover:cursor-pointer">
-                </div>
-                <div class="border-4  w-1/3 border-green-500"></div>
-                <div title="In progress"
-                    class="w-24 h-24 rounded-full border-8 border-gray-600 relative hover:cursor-pointer">
-                </div>
-                <img src='images/icons/lg.gif' alt="this slowpoke moves" class="absolute -z-20 absolute w-60 mx-auto" />
-                <div class="border-4 w-1/3 border-gray-500"></div>
-                <div title="Final" class="w-24 h-24 rounded-full border-8 border-gray-600 hover:cursor-pointer"></div>
-            </div>
+<div id="viewtable" style="display:none" class="w-full mx-4 md:w-3/5 md:mx-auto">
+    <div class="mb-12 w-full border-2 border-gray-200 rounded-xl p-6">
+        <div class="panel mt-6 flex flex-col w-full gap-4" id="viewquotes">
         </div>
     </div>
-    <div class="overflow-x-auto mb-4">
-        <table class="mx-4" style="margin:auto; margin-top:50px;" id="dataTable">
-            <tbody>
-                <tr>
-                    <th>No</th>
-                    <th>Message</th>
-                    <th>File Info</th>
-                    <th>Quote date</th>
-                    <th>Offer date</th>
-                    <th>Appointed date</th>
-                    <th>Delete</th>
-                </tr>
-                <tr id="row_4" class="viewtable">
-                    <td>1</td>
-                    <td>a s</td>
-                    <td>d@g.com</td>
-                    <td>a s</td>
-                    <td>d@g.com</td>
-                    <td style="text-align: center;" onclick="{alert(&quot;Developing!!!&quot;)}">
-                        <!-- <img class="w-8 h-8 mx-auto" src="images/icons/reset-password.png" alt="download"> -->
-                    </td>
-                    <td style="text-align: center;" onclick="{deleteRow(4)}">
-                        <img class="mx-auto" src="images/icons/delete.png" alt="download">
-                    </td>
-                </tr>
-                <tr id="row_5" class="viewtable1">
-                    <td>2</td>
-                    <td>James John</td>
-                    <td>sayjun0505@gmail.com</td>
-                    <td>James John</td>
-                    <td>sayjun0505@gmail.com</td>
-                    <td style="text-align: center;" onclick="{alert(&quot;Developing!!!&quot;)}">
-                        <!-- <img class="w-8 h-8 mx-auto" src="images/icons/reset-password.png" alt="download"> -->
-                    </td>
-                    <td style="text-align: center;" onclick="{deleteRow(5)}">
-                        <img class="mx-auto" src="images/icons/delete.png" alt="download">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
-
-<div id="chat-popup" class="w3-modal">
-    <div class="w3-modal-content">
+<div id="detail-popup" class="w3-modal">
+    <div class="w3-modal-content qq">
         <div class="w3-container">
             <div class=" w3-display-topright">
                 <span><a href="https://run.briskinvoicing.com/help/quotes_help.html" class="underline">Help</a></span>
 
-                <span onclick="document.getElementById('chat-popup').style.display='none'"
+                <span onclick="document.getElementById('detail-popup').style.display='none'"
                     class="w3-button">&times;</span>
             </div>
-
-            <form class="form-container" method="POST" enctype="multipart/form-data" id="quoteForm" class="w-full">
-                <div class="w-full">
-                    <a href="index.php" aria-current="page">
-                        <img src="images/DenturoLogo.png" alt="Logo" loading="lazy" class=" mt-8 logo-img  w-20 h-20">
-                    </a>
+            <div class="w-full" id="quoteForm">
+                <a href="index.php" aria-current="page" class="flex justify-start w-full w-inline-block"><img
+                        src="images/DenturoLogo.png" alt="Logo" loading="lazy" class=" mt-8 logo-img  w-20 h-20"></a>
+                <h1 class="mb-6 text-center text-3xl md:text-5xl" style="font-family: Raleway,sans-serif !important;
+        font-weight: bold;!important">Requested quote</h1>
+                <div id="viewdetail">
                 </div>
-                <h1 class="m-4 text-center" style="font-family: Raleway,sans-serif !important;
-                font-weight: bold;!important">Request a quote</h1>
-                <div class="w-full bg-blue-100 p-4 border-green-500 border-2 mb-8">
-                    <h3>Get Started</h3>
-                    <h4>This is the moment for requesting a quote. Your sent data will be private and we will send
-                        offer
-                        via
-                        email as soon as possible.</h4>
-                </div>
-
-                <div class="">
-                    <label for="message" class=" text-sm text-gray-700 relative"><b>Message</b></label>
-                    <textarea placeholder="Enter your message" id="messageTextarea"
-                        class="h-auto  text-sm text-gray-700" name="message" required></textarea>
-
-                    <label for="attachment" class=" text-sm text-gray-700 relative"><b>Attach Files (Drag
-                            here)</b></label>
-                    <div id="drop_file_zone" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)"
-                        class="hover:cursor-pointer h-fit flex flex-wrap gap-2 justify-center items-center">
-                        <ul id="file_list" class="flex flex-row flex-wrap gap-2"></ul>
-                    </div>
-                    <div class="flex justify-end">Your quote ID: <b id="qid"></b></div>
-                </div>
-                <div class="mt-12 w-full sm:w-2/3 mx-auto">
-                    <div class="flex flex-row justify-between">
-                        <button type="button" class="btn w-2/5 aa send" onclick="uploadSelectedFiles()">
-                            <div id="sending"></div>
-                        </button>
-                        <button type="button" class="btn w-2/5 cancel aa" onclick="closeForm()">Close</button>
-                    </div>
-                </div>
-            </form>
-
+            </div>
         </div>
     </div>
 </div>
 
-<?php include("footer.php"); ?>
-<script>
-var qId;
-document.getElementById("sending").innerHTML = "Send";
+<div id="detail-offer-popup" class="w3-modal">
+    <div class="w3-modal-content qq">
+        <div class="w3-container">
+            <div class=" w3-display-topright">
+                <span><a href="https://run.briskinvoicing.com/help/quotes_help.html" class="underline">Help</a></span>
 
-function utadata() {
-    document.getElementById('chat-popup').style.display = 'block';
-    qId = new Date().valueOf();
-    document.getElementById('qid').innerHTML = qId;
-}
-if (localStorage.getItem("user") == "") window.location.href = "fur-zahnarzte.php";
-else document.getElementById("viewtable").style.display = "block";
+                <span onclick="document.getElementById('detail-offer-popup').style.display='none'"
+                    class="w3-button">&times;</span>
+            </div>
+            <div class="w-full" id="quoteForm">
+                <a href="index.php" aria-current="page" class="flex justify-start w-full w-inline-block"><img
+                        src="images/DenturoLogo.png" alt="Logo" loading="lazy" class=" mt-8 logo-img  w-20 h-20"></a>
+                <h1 class="mb-6 text-center text-3xl md:text-5xl" style="font-family: Raleway,sans-serif !important;
+        font-weight: bold;!important">Received offer</h1>
+                <div class="relative">
+                    <div id="viewdetail-offer">
+                    </div>
+                    <div id="orderstatus" class="absolute bottom-0">
+                        <img src="images/ordered.png" class="opacity-20 w-full h-fit" />
+                    </div>
+                </div>
+                <div class=" w-full mb-8 flex justify-end" onclick="toggleorder()">
+                    <img src=" images/icons/neworder.gif" alt="Logo" loading="lazy" title="Order me when you click this"
+                        class="hover:cursor-pointer -mt-6 mr-4  w-12 h-12">
+                </div>
+                <div class="flex justify-center items-center gap-2">
+                    <button type="button" class="mb-4 py-4 px-6 text-white bg-green-500 rounded-lg mx-auto aa send"
+                        onclick="sendstatus()">
+                        Send
+                    </button>
+                    <button type="button" class="mb-4 py-4 px-6 text-white bg-red-500 rounded-lg mx-auto aa send"
+                        onclick="document.getElementById('detail-offer-popup').style.display='none'">
+                        Cancel
+                    </button>
+                </div>
+            </div>
 
-function file_explorer() {
-    // Add your file exploration logic here
-    // For example, you can trigger a click event on the file input element
-    document.getElementById('selectfile').click();
-}
+        </div>
+    </div>
 
-function openForm() {
-    document.getElementById("offer-popup").style.display = "block";
-}
 
-function openFileInput() {
-    document.getElementById('fileInput').click();
-}
 
-function closeForm() {
-    document.getElementById("chat-popup").style.display = "none";
-    var x = document.getElementById("snackbar");
-    x.className = "show";
-    setTimeout(function() {
-        x.className = x.className.replace("show", "");
-    }, 5000);
-    console.log('Files uploaded successfully');
-}
-$('.form').find('input, textarea').on('keyup blur focus', function(e) {
+    <div id="chat-popup" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container">
+                <div class=" w3-display-topright">
+                    <span><a href="https://run.briskinvoicing.com/help/quotes_help.html"
+                            class="underline">Help</a></span>
 
-    var $this = $(this),
-        label = $this.prev('label');
+                    <span onclick="document.getElementById('chat-popup').style.display='none'"
+                        class="w3-button">&times;</span>
+                </div>
 
-    if (e.type === 'keyup') {
-        if ($this.val() === '') {
-            label.removeClass('active highlight');
+                <form class="form-container" method="POST" enctype="multipart/form-data" id="quoteForm" class="w-full">
+                    <div class="w-full">
+                        <a href="index.php" aria-current="page">
+                            <img src="images/DenturoLogo.png" alt="Logo" loading="lazy"
+                                class=" mt-8 logo-img  w-20 h-20">
+                        </a>
+                    </div>
+                    <h1 class="m-4 text-center" style="font-family: Raleway,sans-serif !important;
+                font-weight: bold;!important">Request a quote</h1>
+                    <div class="w-full bg-blue-100 p-4 border-green-500 border-2 mb-8">
+                        <h3>Get Started</h3>
+                        <h4>This is the moment for requesting a quote. Your sent data will be private and we will
+                            send
+                            offer
+                            via
+                            email as soon as possible.</h4>
+                    </div>
+
+                    <div class="">
+                        <label for="message" class=" text-sm text-gray-700 relative"><b>Message</b></label>
+                        <textarea placeholder="Enter your message" id="messageTextarea"
+                            class="h-auto  text-sm text-gray-700" name="message" required></textarea>
+
+                        <label for="attachment" class=" text-sm text-gray-700 relative"><b>Attach Files (Drag
+                                here)</b></label>
+                        <div id="drop_file_zone" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)"
+                            class="hover:cursor-pointer h-fit flex flex-wrap gap-2 justify-center items-center">
+                            <ul id="file_list" class="flex flex-row flex-wrap gap-2"></ul>
+                        </div>
+                        <div class="flex justify-end">Your quote ID: <b id="qid"></b></div>
+                    </div>
+                    <div class="mt-12 w-full sm:w-2/3 mx-auto">
+                        <div class="flex flex-row justify-between">
+                            <button type="button" class="btn w-2/5 aa send" onclick="uploadSelectedFiles()">
+                                <div id="sending"></div>
+                            </button>
+                            <button type="button" class="btn w-2/5 cancel aa" onclick="closeForm()">Close</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <?php include("footer.php"); ?>
+    <script>
+    var qId;
+    document.getElementById("sending").innerHTML = "Send";
+    var allquotes = [];
+    let toggle = false;
+    document.getElementById("orderstatus").style.display = "none";
+
+    function toggleorder() {
+        if (toggle) {
+            document.getElementById("orderstatus").style.display = "none";
         } else {
-            label.addClass('active highlight');
+            document.getElementById("orderstatus").style.display = "block";
         }
-    } else if (e.type === 'blur') {
-        if ($this.val() === '') {
-            label.removeClass('active highlight');
-        } else {
-            label.removeClass('highlight');
-        }
-    } else if (e.type === 'focus') {
-
-        if ($this.val() === '') {
-            label.removeClass('highlight');
-        } else if ($this.val() !== '') {
-            label.addClass('highlight');
-        }
+        toggle = !toggle;
     }
 
-});
+    function sendstatus() {
+        console.log(toggle);
+        if (toggle) {
+            $.ajax({
+                type: "GET",
+                url: "quoteforden.php",
+                data: {
+                    where: "ordertoggle_" + toggle
+                },
+                success: function(data) {
+                    temp = JSON.parse(JSON.parse(data));
+                    document.getElementById('detail-offer-popup').style.display = 'none';
+                }
+            })
+        }
+        document.getElementById('detail-offer-popup').style.display = 'none';
 
-$('.tab a').on('click', function(e) {
+    }
 
-    e.preventDefault();
+    function getstatusquote(id, s) {
+        switch (id) {
+            case '0':
+                return '<img src="images/icons/view.png" title="Viewed by Lab" class="w-8 h-8 opacity-20" /><img src = "images/icons/offer.png" class = " opacity-10 w-8 h-8" / ><img src = "images/icons/order.png" title = "Sent new order" class = "w-8 h-8 opacity-20" / >';
+                break;
+            case '1':
+                return '<img src="images/icons/view.png" title="Viewed by Lab" class="w-8 h-8" /><img src = "images/icons/offer.png" class = " opacity-10 w-8 h-8" / ><img src = "images/icons/order.png" title = "Sent new order" class = "w-8 h-8 opacity-20" / >';
+                break;
+            case '2':
+                return '<img src="images/icons/view.png" title="Viewed by Lab" class="w-8 h-8" /><img src = "images/icons/offer.png" onclick="viewoffer(' +
+                    s +
+                    ')" title = "Received new offer" class = "w-8 h-8" / ><img src = "images/icons/order.png" title = "Sent new order" class = "w-8 h-8 opacity-20" / >';
+                break;
+            case '3':
+                return '<img src="images/icons/view.png" title="Viewed by Lab" class="w-8 h-8" /><img src = "images/icons/offer.png" onclick="viewoffer(' +
+                    s +
+                    ')" title = "Received new offer" class = "w-8 h-8" / ><img src = "images/icons/order.png" onclick="vieworder(' +
+                    s + ')" title = "Sent new order" class = "w-8 h-8" / >';
+                break;
+        }
+    }
+    var quotescontent = ''
 
-    $(this).parent().addClass('active');
-    $(this).parent().siblings().removeClass('active');
+    function refreshallquotes(quotes) {
+        if (quotes.length != 0) {
+            var firstrow =
+                ' <div class=" hover:cursor-pointer flex flex-col sm:flex-row w-full justify-between sm:items-center py-4"><div class="w-full sm:w-2/12 flex flex-col"><div class="text-lg">' +
+                quotes[0].created + '</div><div class="text-sm">' + quotes[0].passed + ' ago' +
+                '</div></div><div class="mt-2 sm:mt-0 w-full sm:w-6/12 underline text-green-500" onclick="viewQuote(' +
+                quotes[0].id + ')">' + quotes[0].msg +
+                '</div><div class="flex flex-row gap-2">' + getstatusquote(quotes[0].statuss, quotes[0]
+                    .id) +
+                '</div></div>';
+            var statusquote = '';
+            if (quotes.length == 1) {
+                quotescontent = firstrow;
+            } else {
+                for (let i = 1; i < quotes.length; i++) {
+                    quotescontent = quotescontent +
+                        ' <div class=" hover:cursor-pointer flex flex-col sm:flex-row w-full justify-between sm:items-center  border-t-2  border-gray-200 py-4"><div class="w-full sm:w-2/12 flex flex-col"><div class="text-lg">' +
+                        quotes[i].created + '</div><div class="text-sm">' + quotes[i].passed + ' ago' +
+                        '</div></div><div class="mt-2 sm:mt-0 w-full sm:w-6/12 underline text-green-500" onclick="viewQuote(' +
+                        quotes[i].id + ')">' + quotes[i].msg +
+                        '</div><div class="flex flex-row gap-2">' + getstatusquote(quotes[i].statuss,
+                            quotes[i]
+                            .id) +
+                        '</div></div>';
+                }
+                quotescontent = firstrow + quotescontent;
+            }
+        }
+        document.getElementById("viewquotes").innerHTML = quotescontent;
+    }
 
-    target = $(this).attr('href');
+    function viewQuote(qid) {
+        $.ajax({
+            type: "GET",
+            url: "quoteforden.php",
+            data: {
+                where: "q_" + qid
+            },
+            success: function(data) {
+                temp = JSON.parse(JSON.parse(data));
+                console.log(temp)
+                detail = {
+                    userfile: temp.userfile,
+                    id: qid,
+                    usermsg: temp.quote.usermsg,
+                    user: {
+                        fname: temp.quote.fname,
+                        email: temp.quote.email,
+                        phone: temp.quote.phone,
+                        address: temp.quote.address
+                    }
+                };
+                var filetag = '';
+                for (let i = 0; i < detail.userfile.length; i++) {
+                    filetag = filetag + '<a href=' + '"' + detail.userfile[i]
+                        .url + '"' +
+                        'class="underline text-blue-500 hover:text-blue-400" download>' +
+                        detail.userfile[i]
+                        .orgname + '</a>';
+                }
+                document.getElementById('detail-popup').style.display = 'block';
+                document.getElementById('viewdetail').innerHTML =
+                    '<div class="flex flex-row justify-end mb-8"><div><b>quoteID:</b>&nbsp;' +
+                    detail
+                    .id +
+                    '</div></div><div class="w-full p-8 mb-4 rounded-xl border-2 border-gray-300 "><div class="flex flex-row justify-between"><div id="showoption"  class="underline text-blue-500 hover:cursor-pointer hover:text-blue-400"  onclick="visible()"></div></div><div class="flex flex-row justify-between"><div id="showoptionM" class=" underline text-blue-500 hover:cursor-pointer hover:text-blue-400" onclick="visibleM()"></div></div><div id="contactinfoM" class="p-6 border-[1px] border-gray-500 mb-8">' +
+                    detail.usermsg +
+                    '</div><div class="flex flex-row justify-between"><div id="showoptionF"  class="underline text-blue-500 hover:cursor-pointer hover:text-blue-400" onclick="visibleF()"></div></div><div id="contactinfoF" class="w-full p-6 border-[1px] border-gray-500 flex justify-center"><div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> ' +
+                    filetag + '</div></div >';
+            }
+        });
+    }
 
-    $('.tab-content > div').not(target).hide();
+    function viewoffer(id) {
+        console.log("o_" + id);
+        $.ajax({
+            type: "GET",
+            url: "quoteforden.php",
+            data: {
+                where: "o_" + id
+            },
+            success: function(data) {
+                temp = JSON.parse(JSON.parse(data));
+                console.log(temp)
+                detail = {
+                    userfile: temp.userfile,
+                    id: "o_" + id,
+                    created: temp.quote.created,
+                    usermsg: temp.quote.msg,
+                    user: {
+                        fname: temp.quote.fname,
+                        email: temp.quote.email,
+                        phone: temp.quote.phone,
+                        address: temp.quote.address
+                    }
+                };
+                var filetag = '';
+                for (let i = 0; i < detail.userfile.length; i++) {
+                    filetag = filetag + '<a href=' + '"' + detail.userfile[i]
+                        .url + '"' +
+                        'class="underline text-blue-500 hover:text-blue-400" download>' +
+                        detail.userfile[i]
+                        .orgname + '</a>';
+                }
+                document.getElementById('detail-offer-popup').style.display = 'block';
+                document.getElementById('viewdetail-offer').innerHTML =
+                    '<div class="flex flex-row justify-end mb-8"><div class="flex flex-col p-2"><div><b>offerID:</b>&nbsp;' +
+                    detail
+                    .id +
+                    '</div><div><b>created in:</b>&nbsp;' + detail
+                    .created +
+                    '</div></div></div><div id="cont" class="w-full p-8 mb-4 rounded-xl border-2 border-gray-300"><div class="flex flex-row justify-between"><div id="showoption"  class="underline text-blue-500 hover:cursor-pointer hover:text-blue-400"  onclick="visible()"></div></div><div class="flex flex-row justify-between"><div id="showoptionM" class=" underline text-blue-500 hover:cursor-pointer hover:text-blue-400" onclick="visibleM()"></div></div><div id="contactinfoM" class="p-6 border-[1px] border-gray-500 mb-8">' +
+                    detail.usermsg +
+                    '</div><div class="flex flex-row justify-between"><div id="showoptionF"  class="underline text-blue-500 hover:cursor-pointer hover:text-blue-400" onclick="visibleF()"></div></div><div id="contactinfoF" class="w-full p-6 border-[1px] border-gray-500 flex justify-center"><div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> ' +
+                    filetag + '</div></div >';
+            }
+        });
+    }
 
-    $(target).fadeIn(600);
+    function requestquotes(email) {
+        $.ajax({
+            type: "GET",
+            url: "quoteforden.php",
+            data: {
+                where: "allquotes_" + email
+            },
+            success: function(data) {
+                allquotes = JSON.parse(data);
+                refreshallquotes(allquotes);
+            }
+        });
+    }
+    requestquotes(localStorage.getItem("email"));
 
-});
-</script>
+    function utadata() {
+        document.getElementById('chat-popup').style.display = 'block';
+        qId = new Date().valueOf();
+        document.getElementById('qid').innerHTML = qId;
+    }
+    if (localStorage.getItem("user") == "") window.location.href = "fur-zahnarzte.php";
+    else document.getElementById("viewtable").style.display = "block";
+
+    function file_explorer() {
+        // Add your file exploration logic here
+        // For example, you can trigger a click event on the file input element
+        document.getElementById('selectfile').click();
+    }
+
+    function openForm() {
+        document.getElementById("offer-popup").style.display = "block";
+    }
+
+    function openFileInput() {
+        document.getElementById('fileInput').click();
+    }
+
+    function closeForm() {
+        document.getElementById("chat-popup").style.display = "none";
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function() {
+            x.className = x.className.replace("show", "");
+        }, 5000);
+        console.log('Files uploaded successfully');
+    }
+    $('.form').find('input, textarea').on('keyup blur focus', function(e) {
+
+        var $this = $(this),
+            label = $this.prev('label');
+
+        if (e.type === 'keyup') {
+            if ($this.val() === '') {
+                label.removeClass('active highlight');
+            } else {
+                label.addClass('active highlight');
+            }
+        } else if (e.type === 'blur') {
+            if ($this.val() === '') {
+                label.removeClass('active highlight');
+            } else {
+                label.removeClass('highlight');
+            }
+        } else if (e.type === 'focus') {
+
+            if ($this.val() === '') {
+                label.removeClass('highlight');
+            } else if ($this.val() !== '') {
+                label.addClass('highlight');
+            }
+        }
+
+    });
+
+    $('.tab a').on('click', function(e) {
+
+        e.preventDefault();
+
+        $(this).parent().addClass('active');
+        $(this).parent().siblings().removeClass('active');
+
+        target = $(this).attr('href');
+
+        $('.tab-content > div').not(target).hide();
+
+        $(target).fadeIn(600);
+
+    });
+    </script>
 
 </html>

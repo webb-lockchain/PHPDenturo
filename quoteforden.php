@@ -1,9 +1,12 @@
-<!-- uploading action for dentist -->
 <?php
 include("conf.php");
 use DevCoder\DotEnv;
 
 (new DotEnv(__DIR__ . '/.env'))->load();
+$server = getenv('server');
+$user = getenv('login');
+$password = getenv('password');
+$database = getenv('database');
 function encrypt($data, $password)
 {
     $method = "aes-256-cbc";
@@ -14,6 +17,7 @@ function encrypt($data, $password)
     $encoded = base64_encode($salt . $iv . $encrypted);
     return $encoded;
 }
+$conn = new mysqli($server, $user, $password, $database);
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve the form data
@@ -46,13 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newFileName = md5(time()) . "." . $extension;
         $targetFile[] = $targetDirectory . $newFileName; // Get the file name
     }
-    (new DotEnv(__DIR__ . '/.env'))->load();
-    $server = getenv('server');
-    $user = getenv('login');
-    $password = getenv('password');
-    $database = getenv('database');
 
-    $conn = new mysqli($server, $user, $password, $database);
+
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     } else {
@@ -89,10 +88,84 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: /fur-patienten.php");
     exit;
 
-
-
-} else {
-    // If the form is not submitted, redirect to an error page or display an error message
-    echo "Form submission error";
+} 
+else if ($_SERVER["REQUEST_METHOD"] == "GET") {
+   
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    } else { 
+        $validation="";
+        $where=$_GET['where'];
+        if (strpos($where, 'allquotes_')===0){
+            $parts = explode("_",$where);
+            $email=$parts[1];        
+            $validation=$conn->query("SELECT 
+            created, 
+            msg, 
+            id, 
+            qstatus - 1 AS statuss,
+            CASE
+                WHEN TIMESTAMPDIFF(HOUR, quote.created, NOW()) >= 24 
+                THEN CONCAT(FLOOR(TIMESTAMPDIFF(HOUR, quote.created, NOW()) / 24) + 1, ' days')
+                ELSE TIMEDIFF(NOW(), quote.created)
+            END AS passed
+            FROM quote 
+            WHERE email = '$email' ORDER BY created DESC;"); 
+        }
+        else{    
+            if(strpos($where, 'o_')===0){
+                $validation = $conn->query("SELECT orgName AS orgname,changedName AS changedname ,CONCAT('https://denturo.at/uploads/', changedName) AS url FROM `filelist` WHERE detailid = '$where'");
+                $filelistData = array();
+                while ($row = $validation->fetch_assoc()) {
+                    $filelistData[] = $row;
+                }
+                
+                $validation=$conn->query("SELECT 
+                created, 
+                msg
+                FROM offers 
+                WHERE id = '$where';");    
+                $quoteData = $validation->fetch_assoc();
+                $combinedData = array(
+                    'userfile' => $filelistData,
+                    'quote' => $quoteData,
+                );
+                $jsonData = json_encode($combinedData);
+                echo json_encode($jsonData);
+                exit ;        
+            }
+            if(strpos($where, 'q_')===0){
+                $ids= explode("_",$where);
+                $id=$ids[1];
+                $validation = $conn->query("SELECT orgName AS orgname,changedName AS changedname ,CONCAT('https://denturo.at/uploads/', changedName) AS url FROM `filelist` WHERE detailid = $id");
+                $filelistData = array();
+                while ($row = $validation->fetch_assoc()) {
+                    $filelistData[] = $row;
+                }
+                $validation = $conn->query("SELECT quote.id, quote.msg AS usermsg,
+                    CONCAT(users.firstName, ' ', users.lastName) AS fname,
+                    quote.email, users.phoneNumber AS phone,
+                    users.uaddress AS address 
+                    FROM quote 
+                    JOIN users ON users.email = quote.email
+                    WHERE quote.id = $id;");
+                $quoteData = $validation->fetch_assoc();
+                $combinedData = array(
+                    'userfile' => $filelistData,
+                    'quote' => $quoteData,
+                );
+                $jsonData = json_encode($combinedData);
+                echo json_encode($jsonData);
+                exit ;
+            }
+        }        
+        if ($validation) {
+            $resultArray = array();
+            while ($row = $validation->fetch_assoc()) {
+                $resultArray[] = $row;
+            }
+            echo json_encode($resultArray);
+        }  
+    }
 }
 ?>

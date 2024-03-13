@@ -88,10 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     quote.created, 
                     quote.msg, 
                     quote.id, 
-                    TIMEDIFF(NOW(), quote.created) AS passed
+                    CASE
+                        WHEN TIMESTAMPDIFF(HOUR, quote.created, NOW()) >= 24 
+                        THEN CONCAT(FLOOR(TIMESTAMPDIFF(HOUR, quote.created, NOW()) / 24) + 1, ' days')
+                        ELSE TIMEDIFF(NOW(), quote.created)
+                    END AS passed
                     FROM users 
                     JOIN quote ON users.email = quote.email
-                    WHERE quote.qstatus = 1 ;");     
+                    WHERE quote.qstatus = 1 ORDER BY quote.created DESC;");     
                 }
                 else if($where=="cq") {
                     $validation=$conn->query("SELECT 
@@ -99,19 +103,28 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     quote.created, 
                     quote.msg, 
                     quote.id, 
-                    TIMEDIFF(NOW(), quote.created) AS passed
+                    CASE
+                        WHEN TIMESTAMPDIFF(HOUR, quote.created, NOW()) >= 24 
+                        THEN CONCAT(FLOOR(TIMESTAMPDIFF(HOUR, quote.created, NOW()) / 24) + 1, ' days')
+                        ELSE TIMEDIFF(NOW(), quote.created)
+                    END AS passed
                     FROM users 
                     JOIN quote ON users.email = quote.email
-                    WHERE quote.qstatus=2;");   
+                    WHERE quote.qstatus=2 ORDER BY quote.created DESC;");   
                 } 
-                else if($where=="so"){
+                else if($where=="so"){                      
                     $validation=$conn->query("SELECT 
                     'laboratary' AS writer, 
                     created, 
                     msg, 
                     id, 
-                    TIMEDIFF(NOW(), created) AS passed
-                    FROM offers ;");     
+                    CASE
+                        WHEN TIMESTAMPDIFF(HOUR, created, NOW()) >= 24 
+                        THEN CONCAT(FLOOR(TIMESTAMPDIFF(HOUR, created, NOW()) / 24) + 1, ' days')
+                        ELSE TIMEDIFF(NOW(), created)
+                    END AS passed
+                    FROM offers ORDER BY created DESC;");  
+                 
                 }   
                 if ($validation) {
                     $resultArray = array();
